@@ -3,7 +3,7 @@ export default async function handler(req, res) {
     
     const { method, url, body } = req;
     
-    // دریافت پیام از تلگرام (Webhook)
+    // دریافت پیام از تلگرام
     if (url === '/api/index' && method === 'POST' && body && body.message) {
         const webhookUrl = 'https://mojsara.ir/wp-content/plugins/signal-tel/telegram/bot.php';
         
@@ -21,7 +21,7 @@ export default async function handler(req, res) {
         return;
     }
     
-    // ارسال پیام به تلگرام
+    // ارسال به تلگرام با api.telegram.org
     if (req.query && req.query.method) {
         const telegramMethod = req.query.method;
         const telegramUrl = `https://api.telegram.org/bot${BOT_TOKEN}/${telegramMethod}`;
