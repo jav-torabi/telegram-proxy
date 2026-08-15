@@ -5,7 +5,7 @@ export default async function handler(req, res) {
     const { method, url, body } = req;
     
     // مسیر webhook
-    if (url.includes('/webhook') && method === 'POST') {
+    if (req.url === '/api/index' && method === 'POST') {
         const webhookUrl = 'https://mojsara.ir/wp-content/plugins/signal-tel/telegram/bot.php';
         
         try {
@@ -22,11 +22,10 @@ export default async function handler(req, res) {
         return;
     }
     
-    // مسیر bot
-    if (url.includes('/bot')) {
-        const botIndex = url.indexOf('/bot');
-        const telegramPath = url.substring(botIndex + 4); // حذف /bot
-        const telegramUrl = `https://${TELEGRAM_IP}/bot${BOT_TOKEN}${telegramPath}`;
+    // مسیر bot با query parameter
+    if (req.query && req.query.method) {
+        const telegramMethod = req.query.method;
+        const telegramUrl = `https://${TELEGRAM_IP}/bot${BOT_TOKEN}/${telegramMethod}`;
         
         try {
             const response = await fetch(telegramUrl, {
